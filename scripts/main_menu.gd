@@ -10,6 +10,7 @@ const BUTTON_NORMAL_TINT := Color(1.0, 1.0, 1.0, 1.0)
 const BUTTON_HOVER_TINT := Color(1.08, 1.08, 1.18, 1.0)
 const BUTTON_PRESS_TINT := Color(0.92, 0.92, 1.05, 1.0)
 const PLAY_TRANSITION_SECONDS := 2.0
+const EXIT_TRANSITION_SECONDS := 4.0
 
 @onready var title_texture_rect: TextureRect = $MainLayout/Panel/Content/TitleImage
 @onready var panel: Panel = $MainLayout/Panel
@@ -24,14 +25,19 @@ var _button_tweens: Dictionary = {}
 var _menu_time: float = 0.0
 var _panel_base_position: Vector2
 var _is_play_transitioning: bool = false
+var _is_exit_transitioning: bool = false
 var _play_shimmer: ColorRect
 var _play_shimmer_material: ShaderMaterial
+var _exit_underlay_non_title: ColorRect
+var _exit_top_wipe: ColorRect
+var _exit_title_overlay: TextureRect
 
 
 func _ready() -> void:
 	_panel_base_position = panel.position
 	_setup_dynamic_buttons()
 	_setup_play_transition_fx()
+	_setup_exit_transition_fx()
 	set_process(true)
 
 	if FileAccess.file_exists(TITLE_IMAGE_PATH):
@@ -104,7 +110,7 @@ void fragment() {
 
 
 func _on_button_hovered(button: Button) -> void:
-	if _is_play_transitioning:
+	if _is_play_transitioning or _is_exit_transitioning:
 		return
 	if button.text.begins_with("Play"):
 		status_label.text = "Start a new run now."
@@ -116,20 +122,20 @@ func _on_button_hovered(button: Button) -> void:
 
 
 func _on_button_unhovered(button: Button) -> void:
-	if _is_play_transitioning:
+	if _is_play_transitioning or _is_exit_transitioning:
 		return
 	status_label.text = BASE_STATUS
 	_animate_button(button, BUTTON_NORMAL_SCALE, BUTTON_NORMAL_TINT, 0.12)
 
 
 func _on_button_pressed_visual(button: Button) -> void:
-	if _is_play_transitioning and button != play_button:
+	if (_is_play_transitioning and button != play_button) or _is_exit_transitioning:
 		return
 	_animate_button(button, BUTTON_PRESS_SCALE, BUTTON_PRESS_TINT, 0.06)
 
 
 func _on_button_released_visual(button: Button) -> void:
-	if _is_play_transitioning:
+	if _is_play_transitioning or _is_exit_transitioning:
 		return
 	if button.is_hovered():
 		_animate_button(button, BUTTON_HOVER_SCALE, BUTTON_HOVER_TINT, 0.08)
@@ -151,7 +157,7 @@ func _animate_button(button: Button, scale_target: Vector2, tint_target: Color, 
 
 
 func _on_play_button_pressed() -> void:
-	if _is_play_transitioning:
+	if _is_play_transitioning or _is_exit_transitioning:
 		return
 	_is_play_transitioning = true
 	_begin_play_transition_visuals()
@@ -211,9 +217,82 @@ func _start_play_shimmer() -> void:
 	shimmer_tween.parallel().tween_property(_play_shimmer, "modulate:a", 0.0, 0.25).set_delay(0.62)
 
 
+func _setup_exit_transition_fx() -> void:
+	_exit_underlay_non_title = ColorRect.new()
+	_exit_underlay_non_title.name = "ExitUnderlayNonTitle"
+	_exit_underlay_non_title.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_exit_underlay_non_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_exit_underlay_non_title.z_index = 18
+	_exit_underlay_non_title.color = Color(0, 0, 0, 0)
+	add_child(_exit_underlay_non_title)
+
+	_exit_top_wipe = ColorRect.new()
+	_exit_top_wipe.name = "ExitTopWipe"
+	_exit_top_wipe.anchor_left = 0.0
+	_exit_top_wipe.anchor_top = 0.0
+	_exit_top_wipe.anchor_right = 1.0
+	_exit_top_wipe.anchor_bottom = 0.0
+	_exit_top_wipe.offset_left = 0.0
+	_exit_top_wipe.offset_top = 0.0
+	_exit_top_wipe.offset_right = 0.0
+	_exit_top_wipe.offset_bottom = 0.0
+	_exit_top_wipe.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_exit_top_wipe.z_index = 100
+	_exit_top_wipe.color = Color(0, 0, 0, 1)
+	add_child(_exit_top_wipe)
+
+
+func _begin_exit_transition_visuals() -> void:
+	status_label.text = "Exiting..."
+	play_button.disabled = true
+	codex_button.disabled = true
+	exit_button.disabled = true
+
+	# Build a top-level title overlay so it can animate freely to center.
+	var title_start_position := title_texture_rect.get_global_rect().position
+	var title_size := title_texture_rect.size
+	_exit_title_overlay = TextureRect.new()
+	_exit_title_overlay.name = "ExitTitleOverlay"
+	_exit_title_overlay.texture = title_texture_rect.texture
+	_exit_title_overlay.stretch_mode = title_texture_rect.stretch_mode
+	_exit_title_overlay.expand_mode = title_texture_rect.expand_mode
+	_exit_title_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_exit_title_overlay.z_index = 25
+	_exit_title_overlay.position = title_start_position
+	_exit_title_overlay.size = title_size
+	_exit_title_overlay.modulate = Color(1, 1, 1, 1)
+	add_child(_exit_title_overlay)
+	title_texture_rect.visible = false
+
+	# t=0 to t=2: title moves from original position to center screen.
+	var viewport_size := get_viewport_rect().size
+	var centered_position := (viewport_size * 0.5) - (title_size * 0.5)
+	var title_move_tween := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	title_move_tween.tween_property(_exit_title_overlay, "position", centered_position, 2.0)
+
+	# Everything except title image darkens in 1 second.
+	var underlay_tween := create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	underlay_tween.tween_property(_exit_underlay_non_title, "color:a", 1.0, 1.0)
+
+	# Title image darkens steadily from t=0 to t=3.
+	var title_tween := create_tween().set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_IN_OUT)
+	title_tween.tween_property(_exit_title_overlay, "modulate", Color(0, 0, 0, 1), EXIT_TRANSITION_SECONDS)
+
+	# After 1 second, a top black wipe covers the window over 2 seconds.
+	var viewport_height := viewport_size.y
+	var wipe_tween := create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	wipe_tween.tween_interval(1.0)
+	wipe_tween.tween_property(_exit_top_wipe, "offset_bottom", viewport_height, 2.0)
+
+
 func _on_codex_button_pressed() -> void:
 	status_label.text = "CODEX is a fake button right now (coming soon)."
 
 
 func _on_exit_button_pressed() -> void:
+	if _is_exit_transitioning or _is_play_transitioning:
+		return
+	_is_exit_transitioning = true
+	_begin_exit_transition_visuals()
+	await get_tree().create_timer(EXIT_TRANSITION_SECONDS).timeout
 	get_tree().quit()
