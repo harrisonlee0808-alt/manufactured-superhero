@@ -18,6 +18,7 @@ Runs end when you fail a wave. Your score is your highest completed wave.
 The full design specification lives in:
 
 - `docs/Game Plan.md`
+- `docs/game-versions/` (version history)
 
 Always use that document as the canonical direction for mechanics, scaling, UI constraints, and progression rules.
 
@@ -47,7 +48,8 @@ Gameplay code and engine scaffolding are expected to be added next.
 ## Repository structure
 
 - `docs/` - design and planning documents
-  - `Game Plan.md` - detailed spec and spirit-lock constraints
+  - `Game Plan.md` - detailed gameplay and UX plan
+  - `game-versions/` - version history (`0.0.md`, `0.1.md`, ...)
 
 ## Development notes
 

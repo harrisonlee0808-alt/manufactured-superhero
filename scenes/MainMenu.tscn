@@ -1,0 +1,94 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_main_menu_script"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_main_menu_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0784314, 0.0862745, 0.113725, 1)
+
+[node name="MainLayout" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="MainLayout"]
+custom_minimum_size = Vector2(680, 420)
+layout_mode = 2
+
+[node name="Content" type="VBoxContainer" parent="MainLayout/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="TitleLabel" type="Label" parent="MainLayout/Panel/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "Manufactured Superhero"
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="MainLayout/Panel/Content"]
+layout_mode = 2
+text = "Arena survival with good + bad card progression."
+horizontal_alignment = 1
+
+[node name="Buttons" type="VBoxContainer" parent="MainLayout/Panel/Content"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PlayButton" type="Button" parent="MainLayout/Panel/Content/Buttons"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+text = "Play (Fake)"
+
+[node name="CardsButton" type="Button" parent="MainLayout/Panel/Content/Buttons"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+text = "Cards (Fake)"
+
+[node name="ArenaPrototypeButton" type="Button" parent="MainLayout/Panel/Content/Buttons"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+text = "Arena Prototype (Real)"
+
+[node name="ExitButton" type="Button" parent="MainLayout/Panel/Content/Buttons"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+text = "Exit"
+
+[node name="StatusLabel" type="Label" parent="MainLayout/Panel/Content"]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+text = "Fake buttons show placeholder text. Exit is real."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[connection signal="pressed" from="MainLayout/Panel/Content/Buttons/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="MainLayout/Panel/Content/Buttons/CardsButton" to="." method="_on_cards_button_pressed"]
+[connection signal="pressed" from="MainLayout/Panel/Content/Buttons/ArenaPrototypeButton" to="." method="_on_arena_prototype_button_pressed"]
+[connection signal="pressed" from="MainLayout/Panel/Content/Buttons/ExitButton" to="." method="_on_exit_button_pressed"]

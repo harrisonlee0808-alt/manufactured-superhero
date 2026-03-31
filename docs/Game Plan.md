@@ -6,6 +6,8 @@ This document is the single source of truth for the game direction and design co
 When making implementation decisions, use this document as the authority.
 If future ideas conflict with this document, adjust the idea to match the document (unless a future version explicitly changes the rule).
 
+Specific numbers and code are suggestions. This is supposed to be a guide to the gameplay, adhere to that.
+
 ## Core game identity (non-negotiable)
 
 - Genre: top-down 2D arena survival + wave combat + roguelite card progression.
