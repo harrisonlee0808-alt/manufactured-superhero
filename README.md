@@ -33,8 +33,42 @@ Always use that document as the canonical direction for mechanics, scaling, UI c
 
 ## Current project status
 
-This repository currently contains design documentation and setup files.
-Gameplay code and engine scaffolding are expected to be added next.
+This repository contains design docs plus an initial Godot project foundation (menu + prototype arena scene).
+
+## How to run
+
+### Requirements
+
+- Godot `4.4` (or compatible Godot 4.x build)
+
+### Run in Godot Editor
+
+1. Open Godot.
+2. Import this folder: `manufactured-superhero`.
+3. Open the project.
+4. Press Play (`F5`).
+5. The game starts in `MainMenu`.
+
+### Run from terminal
+
+From the project root:
+
+- `godot4 --path .`
+
+If your system uses `godot` instead of `godot4`:
+
+- `godot --path .`
+
+### Current menu/prototype controls
+
+- In menu:
+  - `Play (Fake)` and `Cards (Fake)` show placeholder text.
+  - `Arena Prototype (Real)` opens the current prototype scene.
+  - `Exit` closes the game.
+- In prototype scene:
+  - `Enter`: advance wave (placeholder behavior)
+  - `Space`: take 10 damage (placeholder behavior)
+  - `Esc`: return to menu
 
 ## Suggested next implementation milestones
 
