@@ -62,8 +62,8 @@ If your system uses `godot` instead of `godot4`:
 ### Current menu/prototype controls
 
 - In menu:
-  - `Play (Fake)` and `Cards (Fake)` show placeholder text.
-  - `Arena Prototype (Real)` opens the current prototype scene.
+  - `Play` starts the current prototype scene.
+  - `Codex (Fake)` shows placeholder text.
   - `Exit` closes the game.
 - In prototype scene:
   - `Enter`: advance wave (placeholder behavior)

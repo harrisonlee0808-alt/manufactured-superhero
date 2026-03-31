@@ -1,6 +1,60 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_main_menu_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+bg_color = Color(0.08, 0.1, 0.145, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9, 0.94, 1, 0.9)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.09, 0.12, 0.18, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.83, 0.35, 0.95)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(1, 0.8, 0.25, 0.18)
+shadow_size = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
+bg_color = Color(0.07, 0.09, 0.13, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.75, 0.22, 0.98)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(1, 0.72, 0.2, 0.14)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_disabled"]
+bg_color = Color(0.08, 0.1, 0.145, 0.55)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7, 0.76, 0.86, 0.45)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -18,77 +72,237 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.0784314, 0.0862745, 0.113725, 1)
+color = Color(0.0470588, 0.054902, 0.0745098, 1)
+
+[node name="AmbientTint" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.141176, 0.0862745, 0.282353, 0.1)
 
 [node name="MainLayout" type="CenterContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 24.0
+offset_bottom = 24.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="Panel" parent="MainLayout"]
-custom_minimum_size = Vector2(680, 420)
+custom_minimum_size = Vector2(1160, 960)
 layout_mode = 2
+
+[node name="PanelDecor" type="Control" parent="MainLayout/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="OuterTopLine" type="ColorRect" parent="MainLayout/Panel/PanelDecor"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 14.0
+offset_right = -16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+color = Color(1, 1, 1, 0.75)
+
+[node name="OuterBottomLine" type="ColorRect" parent="MainLayout/Panel/PanelDecor"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -16.0
+offset_right = -16.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.8, 0.88, 1, 0.45)
+
+[node name="OuterLeftLine" type="ColorRect" parent="MainLayout/Panel/PanelDecor"]
+layout_mode = 1
+anchors_preset = 9
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = 16.0
+offset_right = 16.0
+offset_bottom = -16.0
+grow_vertical = 2
+color = Color(1, 1, 1, 0.55)
+
+[node name="OuterRightLine" type="ColorRect" parent="MainLayout/Panel/PanelDecor"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = 16.0
+offset_right = -14.0
+offset_bottom = -16.0
+grow_vertical = 2
+color = Color(0.8, 0.88, 1, 0.42)
+
+[node name="CornerTLH" type="ColorRect" parent="MainLayout/Panel/PanelDecor"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 28.0
+offset_right = 86.0
+offset_bottom = 30.0
+color = Color(1, 1, 1, 0.9)
+
+[node name="CornerTLV" type="ColorRect" parent="MainLayout/Panel/PanelDecor"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 28.0
+offset_right = 30.0
+offset_bottom = 86.0
+color = Color(1, 1, 1, 0.9)
+
+[node name="CornerTRH" type="ColorRect" parent="MainLayout/Panel/PanelDecor"]
+layout_mode = 0
+offset_left = 1074.0
+offset_top = 28.0
+offset_right = 1132.0
+offset_bottom = 30.0
+color = Color(0.88, 0.92, 1, 0.8)
+
+[node name="CornerTRV" type="ColorRect" parent="MainLayout/Panel/PanelDecor"]
+layout_mode = 0
+offset_left = 1130.0
+offset_top = 28.0
+offset_right = 1132.0
+offset_bottom = 86.0
+color = Color(0.88, 0.92, 1, 0.8)
+
+[node name="ButtonFringeTop" type="ColorRect" parent="MainLayout/Panel/PanelDecor"]
+layout_mode = 0
+offset_left = 236.0
+offset_top = 506.0
+offset_right = 924.0
+offset_bottom = 509.0
+color = Color(1, 1, 1, 0.55)
+
+[node name="ButtonFringeBottom" type="ColorRect" parent="MainLayout/Panel/PanelDecor"]
+layout_mode = 0
+offset_left = 236.0
+offset_top = 790.0
+offset_right = 924.0
+offset_bottom = 793.0
+color = Color(0.8, 0.88, 1, 0.4)
+
+[node name="ButtonFringeLeft" type="ColorRect" parent="MainLayout/Panel/PanelDecor"]
+layout_mode = 0
+offset_left = 236.0
+offset_top = 506.0
+offset_right = 239.0
+offset_bottom = 793.0
+color = Color(1, 1, 1, 0.45)
+
+[node name="ButtonFringeRight" type="ColorRect" parent="MainLayout/Panel/PanelDecor"]
+layout_mode = 0
+offset_left = 921.0
+offset_top = 506.0
+offset_right = 924.0
+offset_bottom = 793.0
+color = Color(0.8, 0.88, 1, 0.35)
 
 [node name="Content" type="VBoxContainer" parent="MainLayout/Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 24.0
-offset_top = 24.0
-offset_right = -24.0
-offset_bottom = -24.0
+offset_left = 44.0
+offset_top = 60.0
+offset_right = -44.0
+offset_bottom = -36.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 20
 
-[node name="TitleLabel" type="Label" parent="MainLayout/Panel/Content"]
+[node name="TitleImage" type="TextureRect" parent="MainLayout/Panel/Content"]
+custom_minimum_size = Vector2(0, 380)
 layout_mode = 2
-theme_override_font_sizes/font_size = 42
-text = "Manufactured Superhero"
-horizontal_alignment = 1
+expand_mode = 1
+stretch_mode = 5
+z_index = 20
 
 [node name="SubtitleLabel" type="Label" parent="MainLayout/Panel/Content"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 28
 text = "Arena survival with good + bad card progression."
 horizontal_alignment = 1
 
 [node name="Buttons" type="VBoxContainer" parent="MainLayout/Panel/Content"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 16
 
 [node name="PlayButton" type="Button" parent="MainLayout/Panel/Content/Buttons"]
-custom_minimum_size = Vector2(0, 46)
+custom_minimum_size = Vector2(560, 78)
 layout_mode = 2
-text = "Play (Fake)"
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.96, 0.98, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.97, 0.88, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.94, 0.82, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
+theme_override_font_sizes/font_size = 31
+text = "Play"
 
-[node name="CardsButton" type="Button" parent="MainLayout/Panel/Content/Buttons"]
-custom_minimum_size = Vector2(0, 46)
+[node name="CodexButton" type="Button" parent="MainLayout/Panel/Content/Buttons"]
+custom_minimum_size = Vector2(560, 78)
 layout_mode = 2
-text = "Cards (Fake)"
-
-[node name="ArenaPrototypeButton" type="Button" parent="MainLayout/Panel/Content/Buttons"]
-custom_minimum_size = Vector2(0, 46)
-layout_mode = 2
-text = "Arena Prototype (Real)"
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.96, 0.98, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.97, 0.88, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.94, 0.82, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
+theme_override_font_sizes/font_size = 31
+text = "Codex (Fake)"
 
 [node name="ExitButton" type="Button" parent="MainLayout/Panel/Content/Buttons"]
-custom_minimum_size = Vector2(0, 46)
+custom_minimum_size = Vector2(560, 78)
 layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.96, 0.98, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.97, 0.88, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.94, 0.82, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
+theme_override_font_sizes/font_size = 31
 text = "Exit"
 
 [node name="StatusLabel" type="Label" parent="MainLayout/Panel/Content"]
-custom_minimum_size = Vector2(0, 54)
+custom_minimum_size = Vector2(0, 90)
 layout_mode = 2
-text = "Fake buttons show placeholder text. Exit is real."
+theme_override_font_sizes/font_size = 22
+text = "Loading title image from assets/images/title.png..."
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
 [connection signal="pressed" from="MainLayout/Panel/Content/Buttons/PlayButton" to="." method="_on_play_button_pressed"]
-[connection signal="pressed" from="MainLayout/Panel/Content/Buttons/CardsButton" to="." method="_on_cards_button_pressed"]
-[connection signal="pressed" from="MainLayout/Panel/Content/Buttons/ArenaPrototypeButton" to="." method="_on_arena_prototype_button_pressed"]
+[connection signal="pressed" from="MainLayout/Panel/Content/Buttons/CodexButton" to="." method="_on_codex_button_pressed"]
 [connection signal="pressed" from="MainLayout/Panel/Content/Buttons/ExitButton" to="." method="_on_exit_button_pressed"]
