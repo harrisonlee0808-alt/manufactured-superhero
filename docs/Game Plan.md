@@ -4,7 +4,7 @@
 
 This document is the single source of truth for the game direction and design constraints.
 When making implementation decisions, use this document as the authority.
-If code behavior and this document conflict, update code to match this document (unless a future version of this document explicitly changes the rule).
+If future ideas conflict with this document, adjust the idea to match the document (unless a future version explicitly changes the rule).
 
 ## Core game identity (non-negotiable)
 
@@ -42,7 +42,7 @@ If code behavior and this document conflict, update code to match this document 
 
 - World origin: top-left of screen.
 - Positive X: right, Positive Y: down.
-- Arena collision uses axis-aligned rectangle clamp.
+- Arena boundaries must feel firm and non-passable to all characters.
 
 ## Core run loop
 
@@ -206,9 +206,9 @@ If code behavior and this document conflict, update code to match this document 
 - Identical card duplicate behavior:
   - If repeat allowed later, use predefined stacking coefficients.
   - If repeat not allowed, reroll to another card.
-- Use additive/multiplicative tags explicitly:
-  - Additive example: +0.18 move speed
-  - Multiplicative example: x1.22 enemy HP
+- Stacked effects must always remain readable in card text:
+  - Example phrasing: "Enemy speed increased by 18%"
+  - Example phrasing: "Enemy health increased to 122%"
 
 ## UI and readability requirements
 
@@ -262,7 +262,7 @@ If code behavior and this document conflict, update code to match this document 
 
 - Save high score locally between sessions.
 - If no save exists, high score defaults to 0.
-- Save format can be minimal JSON with version key.
+- Persisted score behavior must be stable across relaunches.
 
 ## Balancing constraints
 
@@ -272,28 +272,43 @@ If code behavior and this document conflict, update code to match this document 
 - No single bad card should spike difficulty by more than approximately 30% alone.
 - Combined bad cards are expected to create exponential pressure.
 
-## Technical implementation guidance (engine-agnostic)
+## UX flow requirements
 
-## Systems to implement as separate modules
+## Start-of-run experience
 
-- WaveManager
-- EnemySpawner
-- CombatResolver
-- CardSystem
-- BuffDebuffSystem
-- BossController
-- SaveSystem
-- HUDController
+- Player enters arena immediately with no long intro.
+- First 5-10 seconds must communicate:
+  - arena bounds
+  - current HP
+  - current wave
+  - basic attack control prompt
+- Early pacing should teach "clear wave -> survive -> repeat" without text-heavy explanation.
 
-## Data-driven definitions
+## Wave transition experience
 
-- Store enemy stats, boss stats, and card definitions in data tables (JSON/scriptable objects).
-- Card effects should be applied through generic stat modifier pipeline, not one-off hardcoded branches when possible.
+- Between normal waves, transitions must be quick and readable.
+- Clear moment-to-moment state changes:
+  - "wave cleared" state
+  - "next wave incoming" state
+  - "boss wave" state (when applicable)
+- Do not add long interruptions between waves.
 
-## Determinism and testing support
+## Boss reward presentation experience
 
-- Use seeded RNG option for reproducible test runs.
-- Log boss card rolls in debug mode.
+- After boss defeat, reward screen must feel like a consequential choice moment.
+- The player should immediately understand:
+  - what positive power they are getting
+  - what new hardship is being added
+- Card descriptions must always use plain language plus exact numeric effects.
+- Reward flow should be short enough to preserve arena-combat momentum.
+
+## Fail-state and score UX
+
+- On death, the run-end screen must prioritize:
+  - wave reached
+  - high score status (new record or not)
+  - short prompt to restart
+- Player should be able to start a new run quickly (minimal menu friction).
 
 ## Minimum viable milestone checklist
 
